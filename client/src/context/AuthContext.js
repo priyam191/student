@@ -4,6 +4,7 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const url = "https://student-backend-t4wm.onrender.com"; // Update with your server URL if needed
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [role, setRole] = useState(localStorage.getItem('role'));
