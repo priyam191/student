@@ -11,13 +11,13 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
 
+ // useEffect
   useEffect(() => {
     const loadUser = async () => {
       if (token) {
         setAuthToken(token);
-        
         try {
-          const res = await axios.get('/api/auth/user');
+          const res = await axios.get(`${url}/api/auth/user`);
           setUser(res.data);
           setIsAuthenticated(true);
         } catch (err) {
@@ -31,40 +31,29 @@ export const AuthProvider = ({ children }) => {
       } else {
         setIsAuthenticated(false);
       }
-      
       setLoading(false);
     };
-    
     loadUser();
   }, [token]);
 
-  // Set axios default header with token
-  const setAuthToken = token => {
-    if (token) {
-      axios.defaults.headers.common['x-auth-token'] = token;
-    } else {
-      delete axios.defaults.headers.common['x-auth-token'];
-    }
-  };
-
-  // Login user
+  // login function
   const login = async formData => {
     try {
-      const res = await axios.post('/api/auth/login', formData);
-      
+      const res = await axios.post(`${url}/api/auth/login`, formData);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.role);
       setToken(res.data.token);
       setRole(res.data.role);
-      
+      setAuthToken(res.data.token);
       return { success: true };
     } catch (err) {
       return { 
         success: false, 
-        error: err.response.data.msg 
+        error: err.response?.data?.msg || 'Login failed. Please try again.'
       };
     }
   };
+
 
   // Logout
   const logout = () => {
