@@ -15,7 +15,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadUser = async () => {
       if (token) {
-        setAuthToken(token);
+        setToken(token);
         try {
           const res = await axios.get(`${url}/api/auth/user`);
           setUser(res.data);
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('role', res.data.role);
       setToken(res.data.token);
       setRole(res.data.role);
-      setAuthToken(res.data.token);
+      setToken(res.data.token);
       return { success: true };
     } catch (err) {
       return { 
