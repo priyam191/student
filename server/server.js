@@ -6,7 +6,10 @@ const app = express();
 const PORT = process.env.PORT;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'https://student-frontend-sable.vercel.app/',
+  credentials: true,
+}));
 app.use(express.json());
 
 // MongoDB Connection

@@ -4,18 +4,17 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const url = process.env.API_URL; // Update with your server URL if needed
+  const url = process.env.API_URL; // Correct usage with REACT_APP_ prefix
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [role, setRole] = useState(localStorage.getItem('role'));
   const [isAuthenticated, setIsAuthenticated] = useState(null);
   const [loading, setLoading] = useState(true);
 
- // useEffect
   useEffect(() => {
     const loadUser = async () => {
       if (token) {
-        setToken(token);
+        setAuthToken(token);
         try {
           const res = await axios.get(`${url}/api/auth/user`);
           setUser(res.data);
@@ -34,9 +33,18 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     };
     loadUser();
-  }, [token]);
+  }, [token, url]);
 
-  // login function
+  // Set axios default header with token
+  const setAuthToken = token => {
+    if (token) {
+      axios.defaults.headers.common['x-auth-token'] = token;
+    } else {
+      delete axios.defaults.headers.common['x-auth-token'];
+    }
+  };
+
+  // Login function
   const login = async formData => {
     try {
       const res = await axios.post(`${url}/api/auth/login`, formData);
@@ -44,16 +52,15 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('role', res.data.role);
       setToken(res.data.token);
       setRole(res.data.role);
-      setToken(res.data.token);
+      setAuthToken(res.data.token);
       return { success: true };
     } catch (err) {
-      return { 
-        success: false, 
+      return {
+        success: false,
         error: err.response?.data?.msg || 'Login failed. Please try again.'
       };
     }
   };
-
 
   // Logout
   const logout = () => {
