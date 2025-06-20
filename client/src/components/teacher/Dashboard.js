@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const TeacherDashboard = () => {
+  const url = process.env.API_URL;
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
@@ -12,12 +13,12 @@ const TeacherDashboard = () => {
     const fetchTeacherData = async () => {
       try {
         // First get the teacher profile using the user ID
-        const resTeachers = await axios.get('/api/teachers');
+        const resTeachers = await axios.get(`${url}/api/teachers`);
         const teacherData = resTeachers.data.find(t => t.user._id === user._id);
         
         if (teacherData) {
           // Get full teacher details with courses
-          const resFullTeacher = await axios.get(`/api/teachers/${teacherData._id}`);
+          const resFullTeacher = await axios.get(`${url}/api/teachers/${teacherData._id}`);
           setTeacher(resFullTeacher.data);
         }
         

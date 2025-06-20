@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const ViewAttendance = () => {
+  const url = process.env.API_URL;
   const [course, setCourse] = useState(null);
   const [attendance, setAttendance] = useState([]);
   const [attendanceSummary, setAttendanceSummary] = useState(null);
@@ -15,21 +16,21 @@ const ViewAttendance = () => {
     const fetchData = async () => {
       try {
         // Get course details
-        const resCourse = await axios.get(`/api/courses/${courseId}`);
+        const resCourse = await axios.get(`${url}/api/courses/${courseId}`);
         setCourse(resCourse.data);
         
         // Get attendance records for this course
-        const resAttendance = await axios.get(`/api/attendance/course/${courseId}`);
+        const resAttendance = await axios.get(`${url}/api/attendance/course/${courseId}`);
         setAttendance(resAttendance.data);
         
         // Get student profile
-        const resStudents = await axios.get('/api/students');
+        const resStudents = await axios.get(`${url}/api/students`);
         const studentData = resStudents.data.find(s => s.user._id === user._id);
         
         if (studentData) {
           // Get attendance summary
           const resSummary = await axios.get(
-            `/api/students/${studentData._id}/attendance/${courseId}`
+            `${url}/api/students/${studentData._id}/attendance/${courseId}`
           );
           setAttendanceSummary(resSummary.data);
         }

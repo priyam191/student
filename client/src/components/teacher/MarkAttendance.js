@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const MarkAttendance = () => {
+  const url = process.env.API_URL;
   const [course, setCourse] = useState(null);
   const [attendanceDate, setAttendanceDate] = useState('');
   const [students, setStudents] = useState([]);
@@ -18,7 +19,7 @@ const MarkAttendance = () => {
   useEffect(() => {
     const fetchCourseData = async () => {
       try {
-        const resCourse = await axios.get(`/api/courses/${courseId}`);
+        const resCourse = await axios.get(`${url}/api/courses/${courseId}`);
         setCourse(resCourse.data);
         
         // Set today's date as default
@@ -69,7 +70,7 @@ const MarkAttendance = () => {
     
     try {
       // Get teacher ID
-      const resTeachers = await axios.get('/api/teachers');
+      const resTeachers = await axios.get(`${url}/api/teachers`);
       const teacherData = resTeachers.data.find(t => t.user._id === user._id);
       
       if (!teacherData) {
@@ -83,13 +84,13 @@ const MarkAttendance = () => {
         teacherId: teacherData._id
       };
       
-      await axios.post('/api/attendance', attendanceData);
+      await axios.post(`${url}/api/attendance`, attendanceData);
       
       setSuccess('Attendance marked successfully!');
       
       // Redirect back to course details after 2 seconds
       setTimeout(() => {
-        history.push(`/course/${courseId}`);
+        history.push(`${url}/course/${courseId}`);
       }, 2000);
     } catch (err) {
       console.error('Error marking attendance:', err);
@@ -110,7 +111,7 @@ const MarkAttendance = () => {
   return (
     <div className="mark-attendance">
       <div className="back-link">
-        <Link to={`/course/${courseId}`}>&larr; Back to Course</Link>
+        <Link to={`${url}/course/${courseId}`}>&larr; Back to Course</Link>
       </div>
       
       <h1>Mark Attendance - {course.courseName}</h1>

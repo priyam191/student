@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const StudentDashboard = () => {
+  const url = process.env.API_URL;
   const [student, setStudent] = useState(null);
   const [courses, setCourses] = useState([]);
   const [attendanceSummary, setAttendanceSummary] = useState({});
@@ -14,14 +15,14 @@ const StudentDashboard = () => {
     const fetchStudentData = async () => {
       try {
         // First get the student profile using the user ID
-        const resStudent = await axios.get('/api/students');
+        const resStudent = await axios.get(`${url}/api/students`);
         const studentData = resStudent.data.find(s => s.user._id === user._id);
         
         if (studentData) {
           setStudent(studentData);
           
           // Fetch the full student details with enrolled courses
-          const resFullStudent = await axios.get(`/api/students/${studentData._id}`);
+          const resFullStudent = await axios.get(`${url}/api/students/${studentData._id}`);
           setStudent(resFullStudent.data);
           
           // Get the attendance summary for each enrolled course
@@ -29,7 +30,7 @@ const StudentDashboard = () => {
           
           for (const course of resFullStudent.data.enrolledCourses) {
             const resAttendance = await axios.get(
-              `/api/students/${studentData._id}/attendance/${course._id}`
+              `${url}/api/students/${studentData._id}/attendance/${course._id}`
             );
             attendanceSummaryData[course._id] = resAttendance.data;
           }

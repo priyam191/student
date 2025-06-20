@@ -4,6 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const CourseDetails = () => {
+  const url = process.env.API_URL;
   const [course, setCourse] = useState(null);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [studentAttendance, setStudentAttendance] = useState({});
@@ -15,11 +16,11 @@ const CourseDetails = () => {
     const fetchCourseData = async () => {
       try {
         // Get course details
-        const resCourse = await axios.get(`/api/courses/${id}`);
+        const resCourse = await axios.get(`${url}/api/courses/${id}`);
         setCourse(resCourse.data);
         
         // Get attendance records for this course
-        const resAttendance = await axios.get(`/api/attendance/course/${id}`);
+        const resAttendance = await axios.get(`${url}/api/attendance/course/${id}`);
         setAttendanceRecords(resAttendance.data);
         
         // Calculate attendance percentage for each student
