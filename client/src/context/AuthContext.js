@@ -4,7 +4,7 @@ import axios from 'axios';
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const url = process.env.API_URL; // Correct usage with REACT_APP_ prefix
+  const url = "https://student-backend-t4wm.onrender.com"; // Correct usage with REACT_APP_ prefix
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [role, setRole] = useState(localStorage.getItem('role'));

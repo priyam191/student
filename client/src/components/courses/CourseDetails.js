@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const CourseDetails = () => {
-  const url = process.env.API_URL;
+  const url = "https://student-backend-t4wm.onrender.com";
   const [course, setCourse] = useState(null);
   const [attendanceRecords, setAttendanceRecords] = useState([]);
   const [studentAttendance, setStudentAttendance] = useState({});

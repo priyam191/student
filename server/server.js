@@ -7,7 +7,7 @@ const PORT = process.env.PORT;
 
 // Middleware
 app.use(cors({
-  origin: 'https://student-backend-t4wm.onrender.com',
+  origin: 'https://student-frontend-sable.vercel.app/',
   credentials: true,
 }));
 app.use(express.json());

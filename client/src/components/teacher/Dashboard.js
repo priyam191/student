@@ -4,7 +4,7 @@ import axios from 'axios';
 import { AuthContext } from '../../context/AuthContext';
 
 const TeacherDashboard = () => {
-  const url = process.env.API_URL;
+  const url = "https://student-backend-t4wm.onrender.com";
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
   const { user } = useContext(AuthContext);
