@@ -59,7 +59,7 @@ const seedDatabase = async () => {
     // Create courses
     const course1 = await Course.create({
       courseCode: 'CS101',
-      courseName: 'Introduction to Programming',
+      courseName: 'Introduction to JAVA Programming',
       teacher: teacher1._id,
       totalClasses: 0
     });
@@ -78,14 +78,30 @@ const seedDatabase = async () => {
       totalClasses: 0
     });
 
+    const course4 = await Course.create({
+      courseCode: 'CS502',
+      courseName: 'DATABASE MANAGEMENT SYSTEMS',
+      teacher: teacher2._id,
+      totalClasses: 0
+    });
+
+    const course5 = await Course.create({
+      courseCode: 'CS504 B',
+      courseName: 'CRYPTOGRAPHY AND NETWORK SECURITY',
+      teacher: teacher2._id,
+      totalClasses: 0
+    });
+
+
     // Update teacher courses
     await Teacher.findByIdAndUpdate(teacher1._id, {
       teachingCourses: [course1._id, course2._id]
     });
 
     await Teacher.findByIdAndUpdate(teacher2._id, {
-      teachingCourses: [course3._id]
+      teachingCourses: [course3._id , course4._id, course5._id]
     });
+
 
     // Create student users (10 students)
     const students = [];
@@ -107,13 +123,13 @@ const seedDatabase = async () => {
         studentId: `S2000${i}`,
         department: i <= 5 ? 'Computer Science' : 'Mathematics',
         year: Math.floor(Math.random() * 4) + 1,
-        enrolledCourses: i <= 7 ? [course1._id, course3._id] : [course2._id, course3._id]
+        enrolledCourses: i <= 5 ? [course1._id, course3._id, course4._id] : [course2._id, course3._id, course5._id]
       });
 
       students.push(student);
 
       // Add students to courses
-      if (i <= 7) {
+      if (i <= 5) {
         await Course.findByIdAndUpdate(course1._id, {
           $push: { students: student._id }
         });
@@ -124,6 +140,14 @@ const seedDatabase = async () => {
       }
 
       await Course.findByIdAndUpdate(course3._id, {
+        $push: { students: student._id }
+      });
+
+      await Course.findByIdAndUpdate(course4._id, {
+        $push: { students: student._id }
+      });
+
+      await Course.findByIdAndUpdate(course5._id, {
         $push: { students: student._id }
       });
     }
