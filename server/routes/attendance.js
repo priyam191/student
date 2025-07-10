@@ -73,4 +73,48 @@ router.get('/course/:courseId', async (req, res) => {
   }
 });
 
+// ...existing code...
+
+// @route   PUT api/attendance/course/:courseId
+// @desc    Edit attendance for a course on a specific date
+// @access  Private (Teacher only)
+router.put('/course/:courseId', async (req, res) => {
+  try {
+    const { date, students, teacherId } = req.body;
+    const { courseId } = req.params;
+
+    // Find the attendance record for the course and date
+    const attendance = await Attendance.findOne({
+      course: courseId,
+      date: new Date(date)
+    });
+
+    if (!attendance) {
+      return res.status(404).json({ msg: 'Attendance record not found for this date.' });
+    }
+
+    // Update students and markedBy fields
+    attendance.students = students;
+    attendance.markedBy = teacherId || attendance.markedBy;
+    await attendance.save();
+
+    // Populate for response
+    const updatedAttendance = await Attendance.findById(attendance._id)
+      .populate({
+        path: 'students.student',
+        populate: {
+          path: 'user',
+          select: 'name'
+        }
+      });
+
+    res.json(updatedAttendance);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Error');
+  }
+});
+
+// ...existing code...
+
 module.exports = router;

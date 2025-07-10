@@ -6,10 +6,24 @@ const app = express();
 const PORT = process.env.PORT;
 
 // Middleware
+
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://student-frontend-sable.vercel.app'
+];
+
 app.use(cors({
-  origin: 'https://student-frontend-sable.vercel.app/',
-  credentials: true,
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS error: Origin ${origin} not allowed`));
+    }
+  },
+  credentials: true
 }));
+
 app.use(express.json());
 
 // MongoDB Connection
