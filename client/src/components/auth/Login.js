@@ -9,6 +9,7 @@ const Login = () => {
   });
   const [error, setError] = useState('');
   const { email, password } = formData;
+  const [isLoading, setIsLoading] = useState(false);
   const { login, isAuthenticated, role } = useContext(AuthContext);
   const history = useHistory();
 
@@ -29,12 +30,14 @@ const Login = () => {
   const onSubmit = async e => {
     e.preventDefault();
     setError('');
+    setIsLoading(true);
     
     const result = await login(formData);
     
     if (!result.success) {
       setError(result.error);
     }
+    setIsLoading(false);
   };
 
   return (
@@ -66,7 +69,8 @@ const Login = () => {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary">Login</button>
+        <button type="submit" disabled={isLoading} style={{opacity: isLoading ? 0.7 : 1,
+                  cursor: isLoading ? 'not-allowed' : 'pointer'}} className="btn btn-primary">Login</button>
       </form>
       
       <div className="demo-credentials">
