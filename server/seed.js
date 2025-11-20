@@ -8,10 +8,7 @@ const Course = require('./models/Course');
 const Attendance = require('./models/Attendance');
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
+mongoose.connect(process.env.MONGO_URI);
 
 // Seed data
 const seedDatabase = async () => {
@@ -26,8 +23,8 @@ const seedDatabase = async () => {
     console.log('Database cleared');
 
     // Create teacher users
-    const teacher1Password = await bcrypt.hash('password123', 10);
-    const teacher2Password = await bcrypt.hash('password123', 10);
+    const teacher1Password = await bcrypt.hash('password123', 8);
+    const teacher2Password = await bcrypt.hash('password123', 8);
 
     const teacherUser1 = await User.create({
       name: 'Dr. Sarah Johnson',
@@ -108,7 +105,7 @@ const seedDatabase = async () => {
     const studentUsers = [];
 
     for (let i = 1; i <= 10; i++) {
-      const studentPassword = await bcrypt.hash('password123', 10);
+      const studentPassword = await bcrypt.hash('password123', 8);
       const studentUser = await User.create({
         name: `Student ${i}`,
         email: `student${i}@example.com`,
